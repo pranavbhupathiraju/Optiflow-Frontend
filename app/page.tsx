@@ -28,8 +28,8 @@ export default function HomePage() {
               </Link>
             </nav>
 
-            <Link href="/services">
-              <Button>Get Started</Button>
+            <Link href="/auth/signin">
+              <Button>Sign In</Button>
             </Link>
           </div>
         </div>

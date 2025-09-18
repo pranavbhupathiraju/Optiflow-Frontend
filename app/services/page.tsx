@@ -75,8 +75,8 @@ export default function ServicesPage() {
                                 <Link href="/services" className="text-foreground font-medium">Services</Link>
                             </nav>
 
-                            <Link href="/services">
-                                <Button>Get Started</Button>
+                            <Link href="/auth/signin">
+                                <Button>Sign In</Button>
                             </Link>
                         </div>
                     </div>
