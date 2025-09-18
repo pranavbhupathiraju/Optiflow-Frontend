@@ -56,8 +56,15 @@ export default function SignInPage() {
         console.error('Auth error:', error)
         setError(error.message)
       } else {
-        console.log('Sign in successful, redirecting to dashboard')
-        router.push('/dashboard')
+        console.log('Sign in successful, session:', data.session)
+        if (data.session) {
+          console.log('Session exists, redirecting to dashboard')
+          // Force a page refresh to ensure middleware picks up the session
+          window.location.href = '/dashboard'
+        } else {
+          console.log('No session created')
+          setError('Authentication failed - no session created')
+        }
       }
     } catch (err) {
       console.error('Unexpected error:', err)
