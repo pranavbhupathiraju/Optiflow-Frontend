@@ -38,38 +38,70 @@ export default function SignInPage() {
     checkUser()
   }, [router, supabase.auth])
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e?.preventDefault?.()
+    
+    console.log('=== SIGN IN DEBUG START ===')
+    console.log('Form submission triggered')
+    console.log('Email:', email)
+    console.log('Password length:', password?.length || 0)
+    console.log('Loading state before:', loading)
+    
     setLoading(true)
     setError('')
+    setMessage('')
     
-    console.log('Sign in attempt:', { email, password: password ? '***' : 'empty' })
+    // Basic validation
+    if (!email || !password) {
+      console.log('Validation failed: missing email or password')
+      setError('Please enter both email and password')
+      setLoading(false)
+      return
+    }
+    
+    if (password.length < 6) {
+      console.log('Validation failed: password too short')
+      setError('Password must be at least 6 characters')
+      setLoading(false)
+      return
+    }
 
     try {
+      console.log('Attempting Supabase sign in...')
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
       
-      console.log('Supabase auth response:', { data, error })
+      console.log('Supabase auth response:')
+      console.log('- Error:', error)
+      console.log('- Session exists:', !!data.session)
+      console.log('- User exists:', !!data.user)
+      if (data.session) {
+        console.log('- Session user email:', data.session.user.email)
+      }
 
       if (error) {
-        console.error('Auth error:', error)
+        console.error('Auth error details:', error.message, error.status)
         setError(error.message)
       } else {
-        console.log('Sign in successful, session:', data.session)
         if (data.session) {
-          console.log('Session exists, redirecting to dashboard')
-          // Force a page refresh to ensure middleware picks up the session
+          console.log('✅ Sign in successful! Redirecting to dashboard...')
+          setMessage('Sign in successful! Redirecting...')
+          
+          // Wait a moment for the session to be set
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          
           window.location.href = '/dashboard'
         } else {
-          console.log('No session created')
+          console.log('❌ No session created')
           setError('Authentication failed - no session created')
         }
       }
     } catch (err) {
-      console.error('Unexpected error:', err)
-      setError('An unexpected error occurred')
+      console.error('❌ Unexpected error:', err)
+      setError(`An unexpected error occurred: ${err}`)
     } finally {
+      console.log('=== SIGN IN DEBUG END ===')
       setLoading(false)
     }
   }
@@ -165,6 +197,7 @@ export default function SignInPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -181,6 +214,7 @@ export default function SignInPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10"
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -191,6 +225,11 @@ export default function SignInPage() {
                     </Alert>
                   )}
 
+                  {message && (
+                    <Alert>
+                      <AlertDescription>{message}</AlertDescription>
+                    </Alert>
+                  )}
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? (
                       <>
@@ -203,6 +242,24 @@ export default function SignInPage() {
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </>
                     )}
+                  </Button>
+                  
+                  {/* Debug button for testing */}
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => {
+                      console.log('Debug: Form values', { email, password: password ? 'has value' : 'empty' })
+                      console.log('Debug: Loading state', loading)
+                      if (!email || !password) {
+                        setError('Please fill in both email and password')
+                        return
+                      }
+                      handleSignIn({ preventDefault: () => {} } as React.FormEvent)
+                    }}
+                  >
+                    Debug Sign In
                   </Button>
                 </form>
               </TabsContent>
