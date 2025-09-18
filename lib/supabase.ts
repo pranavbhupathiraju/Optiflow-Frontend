@@ -1,14 +1,3 @@
-import { createClientComponentClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-
-export const createClient = () => {
-  return createClientComponentClient()
-}
-
-export const createServerClient = () => {
-  return createServerComponentClient({ cookies })
-}
-
 export type Database = {
   public: {
     Tables: {
