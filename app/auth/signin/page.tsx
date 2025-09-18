@@ -12,7 +12,6 @@ import { Mail, Lock, User, Building, Phone, ArrowRight, Loader2 } from 'lucide-r
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
@@ -27,81 +26,62 @@ export default function SignInPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  // Check if user is already signed in
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        router.push('/dashboard')
-      }
-    }
-    checkUser()
-  }, [router, supabase.auth])
   const handleSignIn = async (e: React.FormEvent) => {
-    e?.preventDefault?.()
-    
-    console.log('=== SIGN IN DEBUG START ===')
-    console.log('Form submission triggered')
-    console.log('Email:', email)
-    console.log('Password length:', password?.length || 0)
-    console.log('Loading state before:', loading)
-    
+    e.preventDefault()
     setLoading(true)
     setError('')
     setMessage('')
     
-    // Basic validation
-    if (!email || !password) {
-      console.log('Validation failed: missing email or password')
-      setError('Please enter both email and password')
-      setLoading(false)
-      return
-    }
+    console.log('🔐 Starting sign in process...')
+    console.log('Email:', email)
     
-    if (password.length < 6) {
-      console.log('Validation failed: password too short')
-      setError('Password must be at least 6 characters')
+    if (!email || !password) {
+      setError('Please enter both email and password')
       setLoading(false)
       return
     }
 
     try {
-      console.log('Attempting Supabase sign in...')
+      console.log('📡 Calling Supabase signInWithPassword...')
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: email.trim(),
+        password: password
       })
       
-      console.log('Supabase auth response:')
-      console.log('- Error:', error)
-      console.log('- Session exists:', !!data.session)
-      console.log('- User exists:', !!data.user)
-      if (data.session) {
-        console.log('- Session user email:', data.session.user.email)
-      }
+      console.log('📨 Supabase response:', {
+        hasSession: !!data.session,
+        hasUser: !!data.user,
+        error: error?.message
+      })
 
       if (error) {
-        console.error('Auth error details:', error.message, error.status)
+        console.error('❌ Authentication error:', error.message)
         setError(error.message)
+        setLoading(false)
+        return
+      }
+
+      if (data.session && data.user) {
+        console.log('✅ Authentication successful!')
+        console.log('User:', data.user.email)
+        console.log('Session expires:', data.session.expires_at)
+        
+        setMessage('Sign in successful! Redirecting to dashboard...')
+        
+        // Wait a moment for the session to be set, then redirect
+        setTimeout(() => {
+          console.log('🔄 Redirecting to dashboard...')
+          window.location.href = '/dashboard'
+        }, 1000)
       } else {
-        if (data.session) {
-          console.log('✅ Sign in successful! Redirecting to dashboard...')
-          setMessage('Sign in successful! Redirecting...')
-          
-          // Force a hard redirect to ensure session is picked up
-          setTimeout(() => {
-            window.location.replace('/dashboard')
-          }, 500)
-        } else {
-          console.log('❌ No session created')
-          setError('Authentication failed - no session created')
-        }
+        console.error('❌ No session created')
+        setError('Authentication failed - please try again')
+        setLoading(false)
       }
     } catch (err) {
-      console.error('❌ Unexpected error:', err)
-      setError(`An unexpected error occurred: ${err}`)
-    } finally {
-      console.log('=== SIGN IN DEBUG END ===')
+      console.error('💥 Unexpected error:', err)
+      setError('An unexpected error occurred. Please try again.')
       setLoading(false)
     }
   }
@@ -112,12 +92,18 @@ export default function SignInPage() {
     setError('')
     setMessage('')
     
-    console.log('Sign up attempt:', { email, fullName, companyName, phone })
+    console.log('📝 Starting sign up process...')
+
+    if (!email || !password || !fullName) {
+      setError('Please fill in all required fields')
+      setLoading(false)
+      return
+    }
 
     try {
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: email.trim(),
+        password: password,
         options: {
           data: {
             full_name: fullName,
@@ -127,25 +113,34 @@ export default function SignInPage() {
         }
       })
       
-      console.log('Supabase signup response:', { data, error })
+      console.log('📨 Signup response:', {
+        hasSession: !!data.session,
+        hasUser: !!data.user,
+        error: error?.message
+      })
 
       if (error) {
-        console.error('Signup error:', error)
+        console.error('❌ Signup error:', error.message)
         setError(error.message)
-      } else if (data.user) {
-        console.log('Signup successful')
-        // For development, we'll auto-confirm and redirect
+        setLoading(false)
+        return
+      }
+
+      if (data.user) {
         if (data.session) {
-          console.log('Session created, redirecting to dashboard')
-          router.push('/dashboard')
+          console.log('✅ Signup successful with session!')
+          setMessage('Account created! Redirecting to dashboard...')
+          setTimeout(() => {
+            window.location.href = '/dashboard'
+          }, 1000)
         } else {
-          setMessage('Account created! You can now sign in.')
+          console.log('✅ Signup successful! Please check your email.')
+          setMessage('Account created! Please check your email to verify your account, then sign in.')
         }
       }
     } catch (err) {
-      console.error('Unexpected signup error:', err)
-      setError('An unexpected error occurred')
-    } finally {
+      console.error('💥 Signup error:', err)
+      setError('An unexpected error occurred during signup')
       setLoading(false)
     }
   }
@@ -230,6 +225,7 @@ export default function SignInPage() {
                       <AlertDescription>{message}</AlertDescription>
                     </Alert>
                   )}
+
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? (
                       <>
@@ -243,24 +239,6 @@ export default function SignInPage() {
                       </>
                     )}
                   </Button>
-                  
-                  {/* Debug button for testing */}
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => {
-                      console.log('Debug: Form values', { email, password: password ? 'has value' : 'empty' })
-                      console.log('Debug: Loading state', loading)
-                      if (!email || !password) {
-                        setError('Please fill in both email and password')
-                        return
-                      }
-                      handleSignIn({ preventDefault: () => {} } as React.FormEvent)
-                    }}
-                  >
-                    Debug Sign In
-                  </Button>
                 </form>
               </TabsContent>
 
@@ -268,7 +246,7 @@ export default function SignInPage() {
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-name">Full Name</Label>
+                      <Label htmlFor="signup-name">Full Name *</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -279,6 +257,7 @@ export default function SignInPage() {
                           onChange={(e) => setFullName(e.target.value)}
                           className="pl-10"
                           required
+                          disabled={loading}
                         />
                       </div>
                     </div>
@@ -294,6 +273,7 @@ export default function SignInPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           className="pl-10"
+                          disabled={loading}
                         />
                       </div>
                     </div>
@@ -310,12 +290,13 @@ export default function SignInPage() {
                         value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                         className="pl-10"
+                        disabled={loading}
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">Email *</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -326,12 +307,13 @@ export default function SignInPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">Password *</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -343,6 +325,7 @@ export default function SignInPage() {
                         className="pl-10"
                         required
                         minLength={6}
+                        disabled={loading}
                       />
                     </div>
                   </div>

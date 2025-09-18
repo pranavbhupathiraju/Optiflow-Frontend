@@ -7,68 +7,39 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   
   try {
-    // Create supabase client with explicit refresh
-    const supabase = createMiddlewareClient<Database>({ 
-      req, 
-      res,
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    })
-
-    // Refresh the session to ensure we have the latest state
-    await supabase.auth.refreshSession()
+    const supabase = createMiddlewareClient<Database>({ req, res })
     
-    const {
-      data: { session },
-      error: sessionError
-    } = await supabase.auth.getSession()
-
-    if (sessionError) {
-      console.log('Middleware: Session error:', sessionError)
+    // Get the session
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
+    const isDashboardPage = req.nextUrl.pathname.startsWith('/dashboard')
+    
+    console.log(`🔍 Middleware Check: ${req.nextUrl.pathname}`)
+    console.log(`   Session: ${session ? 'EXISTS' : 'NONE'}`)
+    console.log(`   User: ${session?.user?.email || 'NONE'}`)
+    
+    // If trying to access dashboard without session, redirect to signin
+    if (isDashboardPage && !session) {
+      console.log('🚫 No session for dashboard - redirecting to signin')
+      return NextResponse.redirect(new URL('/auth/signin', req.url))
     }
-
-    console.log(`Middleware: Path=${req.nextUrl.pathname}, Session=${session ? 'exists' : 'none'}, User=${session?.user?.email || 'none'}`);
-
-    // Handle auth callback first
-    if (req.nextUrl.pathname === '/auth/callback') {
-      console.log('Middleware: Handling auth callback');
-      return res
+    
+    // If signed in and trying to access auth pages, redirect to dashboard
+    if (isAuthPage && session && req.nextUrl.pathname !== '/auth/callback') {
+      console.log('✅ Already signed in - redirecting to dashboard')
+      return NextResponse.redirect(new URL('/dashboard', req.url))
     }
-
-    // Protect dashboard routes
-    if (req.nextUrl.pathname.startsWith('/dashboard')) {
-      if (!session) {
-        console.log('Middleware: No session for dashboard, redirecting to /auth/signin');
-        const redirectUrl = new URL('/auth/signin', req.url)
-        return NextResponse.redirect(redirectUrl)
-      }
-      console.log('Middleware: Session exists for dashboard, allowing access');
-    }
-
-    // Redirect authenticated users away from auth pages to dashboard
-    if (req.nextUrl.pathname.startsWith('/auth/signin') && session) {
-      console.log('Middleware: Authenticated user on signin page, redirecting to /dashboard');
-      const redirectUrl = new URL('/dashboard', req.url)
-      return NextResponse.redirect(redirectUrl)
-    }
-
+    
     return res
   } catch (error) {
-    console.error('Middleware error:', error)
-    // If middleware fails, allow the request to continue
+    console.error('💥 Middleware error:', error)
     return res
   }
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|optiflow-logo-new.png).*)',
   ]
 }
