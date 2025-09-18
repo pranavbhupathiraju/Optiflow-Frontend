@@ -5,7 +5,14 @@ import type { Database } from '@/lib/supabase/types'
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient<Database>({ req, res })
+  
+  // Explicitly pass Supabase credentials to avoid env variable issues
+  const supabase = createMiddlewareClient<Database>({ 
+    req, 
+    res,
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  })
 
   const {
     data: { session },
