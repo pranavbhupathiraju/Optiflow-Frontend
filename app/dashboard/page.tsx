@@ -48,12 +48,16 @@ export default function DashboardPage() {
       if (user) {
         setUser(user)
         await fetchUserData(user.id)
+      } else {
+        // If no user, redirect to signin
+        router.push('/auth/signin')
+        return
       }
       setLoading(false)
     }
 
     getUser()
-  }, [])
+  }, [router, supabase.auth])
 
   const fetchUserData = async (userId: string) => {
     // Fetch profile

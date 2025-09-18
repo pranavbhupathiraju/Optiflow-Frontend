@@ -11,26 +11,37 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
+  // Handle auth callback first
+  if (req.nextUrl.pathname === '/auth/callback') {
+    return res
+  }
+
   // Protect dashboard routes
   if (req.nextUrl.pathname.startsWith('/dashboard')) {
     if (!session) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url))
+      const redirectUrl = new URL('/auth/signin', req.url)
+      return NextResponse.redirect(redirectUrl)
     }
   }
 
-  // Redirect authenticated users away from auth pages
+  // Redirect authenticated users away from auth pages to dashboard
   if (req.nextUrl.pathname.startsWith('/auth/signin') && session) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
-
-  // Handle auth callback
-  if (req.nextUrl.pathname === '/auth/callback') {
-    return res
+    const redirectUrl = new URL('/dashboard', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/auth/signin', '/auth/callback']
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ]
 }

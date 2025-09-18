@@ -9,7 +9,13 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = createRouteHandlerClient<Database>({ cookies })
-    await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (error) {
+      console.error('Auth callback error:', error)
+      // Redirect to signin with error
+      return NextResponse.redirect(new URL('/auth/signin?error=auth_callback_error', request.url))
+    }
   }
 
   // URL to redirect to after sign in process completes

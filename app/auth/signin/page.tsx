@@ -26,6 +26,16 @@ export default function SignInPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  // Check if user is already signed in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        router.push('/dashboard')
+      }
+    }
+    checkUser()
+  }, [router, supabase.auth])
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -41,6 +51,7 @@ export default function SignInPage() {
         setError(error.message)
       } else {
         router.push('/dashboard')
+        router.refresh()
       }
     } catch (err) {
       setError('An unexpected error occurred')
