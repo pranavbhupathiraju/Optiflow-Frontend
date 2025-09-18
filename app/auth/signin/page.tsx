@@ -41,19 +41,26 @@ export default function SignInPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
+    
+    console.log('Sign in attempt:', { email, password: password ? '***' : 'empty' })
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
+      
+      console.log('Supabase auth response:', { data, error })
 
       if (error) {
+        console.error('Auth error:', error)
         setError(error.message)
       } else {
-        router.refresh()
+        console.log('Sign in successful, redirecting to dashboard')
+        router.push('/dashboard')
       }
     } catch (err) {
+      console.error('Unexpected error:', err)
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)
@@ -65,6 +72,8 @@ export default function SignInPage() {
     setLoading(true)
     setError('')
     setMessage('')
+    
+    console.log('Sign up attempt:', { email, fullName, companyName, phone })
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -78,13 +87,24 @@ export default function SignInPage() {
           }
         }
       })
+      
+      console.log('Supabase signup response:', { data, error })
 
       if (error) {
+        console.error('Signup error:', error)
         setError(error.message)
       } else if (data.user) {
-        setMessage('Check your email for the confirmation link!')
+        console.log('Signup successful')
+        // For development, we'll auto-confirm and redirect
+        if (data.session) {
+          console.log('Session created, redirecting to dashboard')
+          router.push('/dashboard')
+        } else {
+          setMessage('Account created! You can now sign in.')
+        }
       }
     } catch (err) {
+      console.error('Unexpected signup error:', err)
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)
