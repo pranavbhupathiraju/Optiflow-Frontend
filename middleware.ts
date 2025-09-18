@@ -11,21 +11,27 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
+  console.log(`Middleware: Path=${req.nextUrl.pathname}, Session=${session ? 'exists' : 'none'}`);
+
   // Handle auth callback first
   if (req.nextUrl.pathname === '/auth/callback') {
+    console.log('Middleware: Handling auth callback');
     return res
   }
 
   // Protect dashboard routes
   if (req.nextUrl.pathname.startsWith('/dashboard')) {
     if (!session) {
+      console.log('Middleware: No session for dashboard, redirecting to /auth/signin');
       const redirectUrl = new URL('/auth/signin', req.url)
       return NextResponse.redirect(redirectUrl)
     }
+    console.log('Middleware: Session exists for dashboard, allowing access');
   }
 
   // Redirect authenticated users away from auth pages to dashboard
   if (req.nextUrl.pathname.startsWith('/auth/signin') && session) {
+    console.log('Middleware: Authenticated user on signin page, redirecting to /dashboard');
     const redirectUrl = new URL('/dashboard', req.url)
     return NextResponse.redirect(redirectUrl)
   }

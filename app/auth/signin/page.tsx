@@ -51,7 +51,6 @@ export default function SignInPage() {
       if (error) {
         setError(error.message)
       } else {
-        router.push('/dashboard')
         router.refresh()
       }
     } catch (err) {
