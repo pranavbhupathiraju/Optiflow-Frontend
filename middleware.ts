@@ -23,9 +23,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
+  // Handle auth callback
+  if (req.nextUrl.pathname === '/auth/callback') {
+    return res
+  }
+
   return res
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/auth/signin']
+  matcher: ['/dashboard/:path*', '/auth/signin', '/auth/callback']
 }

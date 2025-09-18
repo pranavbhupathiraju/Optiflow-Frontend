@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bot, Globe, MessageSquare, Wrench, ArrowRight } from 'lucide-react'
 import ContactFormModal from "@/components/contact-form-modal"
 import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
 
 const services = [
     {
@@ -42,6 +43,26 @@ const services = [
 export default function ServicesPage() {
     const [selectedService, setSelectedService] = useState<string | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [user, setUser] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+    const supabase = createClient()
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser()
+            setUser(user)
+            setLoading(false)
+        }
+
+        getUser()
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user ?? null)
+        })
+
+        return () => subscription.unsubscribe()
+    }, [supabase.auth])
 
     const handleServiceClick = (serviceTitle: string) => {
         setSelectedService(serviceTitle)
@@ -75,9 +96,17 @@ export default function ServicesPage() {
                                 <Link href="/services" className="text-foreground font-medium">Services</Link>
                             </nav>
 
-                            <Link href="/auth/signin">
-                                <Button>Sign In</Button>
-                            </Link>
+                            {loading ? (
+                                <Button disabled>Loading...</Button>
+                            ) : user ? (
+                                <Link href="/dashboard">
+                                    <Button>Dashboard</Button>
+                                </Link>
+                            ) : (
+                                <Link href="/auth/signin">
+                                    <Button>Sign In</Button>
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </header>
