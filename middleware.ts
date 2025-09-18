@@ -7,8 +7,17 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   
   try {
-    const supabase = createMiddlewareClient<Database>({ req, res })
+    // Create supabase client with explicit refresh
+    const supabase = createMiddlewareClient<Database>({ 
+      req, 
+      res,
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    })
 
+    // Refresh the session to ensure we have the latest state
+    await supabase.auth.refreshSession()
+    
     const {
       data: { session },
       error: sessionError

@@ -88,10 +88,10 @@ export default function SignInPage() {
           console.log('✅ Sign in successful! Redirecting to dashboard...')
           setMessage('Sign in successful! Redirecting...')
           
-          // Wait a moment for the session to be set
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          
-          window.location.href = '/dashboard'
+          // Force a hard redirect to ensure session is picked up
+          setTimeout(() => {
+            window.location.replace('/dashboard')
+          }, 500)
         } else {
           console.log('❌ No session created')
           setError('Authentication failed - no session created')
