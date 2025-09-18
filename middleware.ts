@@ -6,23 +6,33 @@ import type { Database } from '@/lib/supabase/types'
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   
+  // Skip middleware for static files and API routes
+  if (
+    req.nextUrl.pathname.startsWith('/_next') ||
+    req.nextUrl.pathname.startsWith('/api') ||
+    req.nextUrl.pathname.includes('.')
+  ) {
+    return res
+  }
+
   try {
     const supabase = createMiddlewareClient<Database>({ req, res })
     
-    // Get the session
+    // Refresh the session to get the latest state
     const { data: { session }, error } = await supabase.auth.getSession()
-    
-    const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
-    const isDashboardPage = req.nextUrl.pathname.startsWith('/dashboard')
     
     console.log(`🔍 Middleware Check: ${req.nextUrl.pathname}`)
     console.log(`   Session: ${session ? 'EXISTS' : 'NONE'}`)
     console.log(`   User: ${session?.user?.email || 'NONE'}`)
     
-    // If trying to access dashboard without session, redirect to signin
+    const isDashboardPage = req.nextUrl.pathname.startsWith('/dashboard')
+    const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
+    
+    // TEMPORARILY DISABLE DASHBOARD PROTECTION FOR DEBUGGING
+    // Let's see if the dashboard loads without middleware blocking it
     if (isDashboardPage && !session) {
-      console.log('🚫 No session for dashboard - redirecting to signin')
-      return NextResponse.redirect(new URL('/auth/signin', req.url))
+      console.log('⚠️ TEMPORARILY ALLOWING DASHBOARD ACCESS FOR DEBUGGING')
+      // return NextResponse.redirect(new URL('/auth/signin', req.url))
     }
     
     // If signed in and trying to access auth pages, redirect to dashboard

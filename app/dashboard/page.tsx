@@ -38,18 +38,24 @@ export default function DashboardPage() {
   const [services, setServices] = useState<Service[]>([])
   const [billing, setBilling] = useState<Billing[]>([])
   const [loading, setLoading] = useState(true)
+  const [authError, setAuthError] = useState<string | null>(null)
   
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
     const getUser = async () => {
+      console.log('🔍 Dashboard: Checking authentication...')
       const { data: { user } } = await supabase.auth.getUser()
+      console.log('🔍 Dashboard: User data:', user ? user.email : 'NONE')
+      
       if (user) {
+        console.log('✅ Dashboard: User authenticated, fetching data...')
         setUser(user)
         await fetchUserData(user.id)
       } else {
-        // If no user, redirect to signin
+        console.log('❌ Dashboard: No user found, redirecting to signin')
+        setAuthError('Please sign in to access the dashboard')
         router.push('/auth/signin')
         return
       }
@@ -148,6 +154,20 @@ export default function DashboardPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (authError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Authentication Required</h2>
+          <p className="text-muted-foreground mb-4">{authError}</p>
+          <Button onClick={() => router.push('/auth/signin')}>
+            Go to Sign In
+          </Button>
         </div>
       </div>
     )

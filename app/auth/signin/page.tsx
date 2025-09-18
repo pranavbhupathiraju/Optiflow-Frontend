@@ -69,11 +69,11 @@ export default function SignInPage() {
         
         setMessage('Sign in successful! Redirecting to dashboard...')
         
-        // Wait a moment for the session to be set, then redirect
+        // Force a complete page reload to ensure session is detected
         setTimeout(() => {
           console.log('🔄 Redirecting to dashboard...')
-          window.location.href = '/dashboard'
-        }, 1000)
+          window.location.replace('/dashboard')
+        }, 1500)
       } else {
         console.error('❌ No session created')
         setError('Authentication failed - please try again')
