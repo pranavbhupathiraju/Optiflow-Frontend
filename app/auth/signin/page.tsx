@@ -12,7 +12,7 @@ import { Mail, Lock, User, Building, Phone, ArrowRight, Loader2 } from 'lucide-r
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect }
+import { useEffect } from 'react'
 
 export default function SignInPage() {
   const [email, setEmail] = useState('')
