@@ -66,4 +66,4 @@ function AvatarInitials({
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback, AvatarInitials }</parameter>
+export { Avatar, AvatarImage, AvatarFallback, AvatarInitials }
