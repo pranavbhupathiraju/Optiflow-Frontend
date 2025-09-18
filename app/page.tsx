@@ -1,10 +1,35 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowRight, Bot, BarChart3, TrendingUp } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
+import { createClient } from "@/lib/supabase/client"
 
 export default function HomePage() {
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+      setLoading(false)
+    }
+
+    getUser()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase.auth])
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -28,9 +53,17 @@ export default function HomePage() {
               </Link>
             </nav>
 
-            <Link href="/auth/signin">
-              <Button>Sign In</Button>
-            </Link>
+            {loading ? (
+              <Button disabled>Loading...</Button>
+            ) : user ? (
+              <Link href="/dashboard">
+                <Button>Dashboard</Button>
+              </Link>
+            ) : (
+              <Link href="/auth/signin">
+                <Button>Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </header>
