@@ -96,17 +96,6 @@ export default function ServicesPage() {
                                 <Link href="/services" className="text-foreground font-medium">Services</Link>
                             </nav>
 
-                            {loading ? (
-                                <Button disabled>Loading...</Button>
-                            ) : user ? (
-                                <Link href="/dashboard">
-                                    <Button>Dashboard</Button>
-                                </Link>
-                            ) : (
-                                <Link href="/auth/signin">
-                                    <Button>Sign In</Button>
-                                </Link>
-                            )}
                             <Link href="/dashboard">
                                 <Button>Dashboard</Button>
                             </Link>
