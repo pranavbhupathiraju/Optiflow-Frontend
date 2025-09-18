@@ -64,6 +64,9 @@ export default function HomePage() {
                 <Button>Sign In</Button>
               </Link>
             )}
+            <Link href="/dashboard">
+              <Button>Dashboard</Button>
+            </Link>
           </div>
         </div>
       </header>
