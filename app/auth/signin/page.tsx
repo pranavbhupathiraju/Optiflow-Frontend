@@ -28,21 +28,28 @@ export default function SignInPage() {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('🔥 FORM SUBMITTED - handleSignIn called')
+    console.log('📝 Form data:', { email: email.trim(), passwordLength: password.length })
+    
     setLoading(true)
     setError('')
     setMessage('')
     
-    console.log('🔐 Starting sign in process...', { email: email.trim() })
+    console.log('🔐 Starting sign in process...')
+    console.log('📧 Email:', email.trim())
+    console.log('🔑 Password length:', password.length)
     console.log('Email:', email)
     
     if (!email || !password) {
+      console.log('❌ Missing email or password')
       setError('Please enter both email and password')
       setLoading(false)
       return
     }
 
     try {
-      console.log('📡 Calling Supabase signInWithPassword...', {
+      console.log('📡 About to call Supabase signInWithPassword...')
+      console.log('🔧 Supabase client exists:', !!supabase)
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
       })
@@ -52,7 +59,18 @@ export default function SignInPage() {
         password: password
       })
       
-      console.log('📨 Supabase authentication response:', {
+      console.log('📨 Supabase authentication response received!')
+      console.log('✅ Has session:', !!data.session)
+      console.log('👤 Has user:', !!data.user)
+      console.log('❌ Error:', error?.message || 'None')
+      
+      if (data.session) {
+        console.log('🎫 Session details:', {
+          userId: data.session.user.id,
+          email: data.session.user.email,
+          expiresAt: data.session.expires_at
+        })
+      }
         hasSession: !!data.session,
         hasUser: !!data.user,
         error: error?.message,
@@ -65,6 +83,10 @@ export default function SignInPage() {
           message: error.message,
           status: error.status,
           fullError: error
+        console.error('💥 Authentication error details:', {
+          message: error.message,
+          status: error.status,
+          name: error.name
         })
         setError(`Authentication failed: ${error.message}`)
         setLoading(false)
@@ -72,7 +94,7 @@ export default function SignInPage() {
       }
 
       if (data.session && data.user) {
-        console.log('✅ Authentication successful!', {
+        console.log('🎉 Authentication successful! Preparing redirect...')
           userId: data.user.id,
           userEmail: data.user.email,
           sessionExpires: data.session.expires_at,
@@ -83,14 +105,16 @@ export default function SignInPage() {
         
         setMessage('Sign in successful! Redirecting to dashboard...')
         
-        console.log('🔄 Starting redirect in 1.5 seconds...')
+        console.log('⏰ Starting 1.5 second countdown to redirect...')
         // Force a complete page reload to ensure session is detected
         setTimeout(() => {
-          console.log('🔄 Executing redirect to dashboard...')
+          console.log('🚀 EXECUTING REDIRECT NOW!')
+          console.log('🌐 Current URL:', window.location.href)
+          console.log('🎯 Redirecting to:', window.location.origin + '/dashboard')
           window.location.replace('/dashboard')
         }, 1500)
       } else {
-        console.error('❌ No session or user created', {
+        console.error('💔 No session or user created despite no error')
           hasSession: !!data.session,
           hasUser: !!data.user,
           sessionData: data.session,
@@ -100,7 +124,11 @@ export default function SignInPage() {
         setLoading(false)
       }
     } catch (err) {
-      console.error('💥 Unexpected error during sign in:', {
+      console.error('💥 UNEXPECTED ERROR during sign in:', {
+        error: err,
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : 'No stack trace'
+      })
         error: err,
         message: err instanceof Error ? err.message : 'Unknown error',
         stack: err instanceof Error ? err.stack : undefined
@@ -108,6 +136,8 @@ export default function SignInPage() {
       setError(`Connection error: ${err instanceof Error ? err.message : 'Unknown error'}`)
       setLoading(false)
     }
+    
+    console.log('🏁 handleSignIn function completed')
   }
 
   const handleSignUp = async (e: React.FormEvent) => {
