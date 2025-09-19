@@ -32,7 +32,7 @@ export default function SignInPage() {
     setError('')
     setMessage('')
     
-    console.log('🔐 Starting sign in process...')
+    console.log('🔐 Starting sign in process...', { email: email.trim() })
     console.log('Email:', email)
     
     if (!email || !password) {
@@ -42,46 +42,70 @@ export default function SignInPage() {
     }
 
     try {
-      console.log('📡 Calling Supabase signInWithPassword...')
+      console.log('📡 Calling Supabase signInWithPassword...', {
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      })
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password: password
       })
       
-      console.log('📨 Supabase response:', {
+      console.log('📨 Supabase authentication response:', {
         hasSession: !!data.session,
         hasUser: !!data.user,
-        error: error?.message
+        error: error?.message,
+        errorCode: error?.status,
+        fullError: error
       })
 
       if (error) {
-        console.error('❌ Authentication error:', error.message)
-        setError(error.message)
+        console.error('❌ Authentication error:', {
+          message: error.message,
+          status: error.status,
+          fullError: error
+        })
+        setError(`Authentication failed: ${error.message}`)
         setLoading(false)
         return
       }
 
       if (data.session && data.user) {
-        console.log('✅ Authentication successful!')
+        console.log('✅ Authentication successful!', {
+          userId: data.user.id,
+          userEmail: data.user.email,
+          sessionExpires: data.session.expires_at,
+          accessToken: data.session.access_token ? 'present' : 'missing'
+        })
         console.log('User:', data.user.email)
         console.log('Session expires:', data.session.expires_at)
         
         setMessage('Sign in successful! Redirecting to dashboard...')
         
+        console.log('🔄 Starting redirect in 1.5 seconds...')
         // Force a complete page reload to ensure session is detected
         setTimeout(() => {
-          console.log('🔄 Redirecting to dashboard...')
+          console.log('🔄 Executing redirect to dashboard...')
           window.location.replace('/dashboard')
         }, 1500)
       } else {
-        console.error('❌ No session created')
-        setError('Authentication failed - please try again')
+        console.error('❌ No session or user created', {
+          hasSession: !!data.session,
+          hasUser: !!data.user,
+          sessionData: data.session,
+          userData: data.user
+        })
+        setError('Authentication failed - no session created. Please try again.')
         setLoading(false)
       }
     } catch (err) {
-      console.error('💥 Unexpected error:', err)
-      setError('An unexpected error occurred. Please try again.')
+      console.error('💥 Unexpected error during sign in:', {
+        error: err,
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : undefined
+      })
+      setError(`Connection error: ${err instanceof Error ? err.message : 'Unknown error'}`)
       setLoading(false)
     }
   }
