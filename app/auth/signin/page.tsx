@@ -50,6 +50,7 @@ export default function SignInPage() {
     try {
       console.log('📡 About to call Supabase signInWithPassword...')
       console.log('🔧 Supabase client exists:', !!supabase)
+      console.log('🔧 Environment check:', {
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
       })
@@ -71,6 +72,7 @@ export default function SignInPage() {
           expiresAt: data.session.expires_at
         })
       }
+      console.log('📊 Full response summary:', {
         hasSession: !!data.session,
         hasUser: !!data.user,
         error: error?.message,
@@ -83,6 +85,7 @@ export default function SignInPage() {
           message: error.message,
           status: error.status,
           fullError: error
+        })
         console.error('💥 Authentication error details:', {
           message: error.message,
           status: error.status,
@@ -95,6 +98,7 @@ export default function SignInPage() {
 
       if (data.session && data.user) {
         console.log('🎉 Authentication successful! Preparing redirect...')
+        console.log('🎯 Session and user details:', {
           userId: data.user.id,
           userEmail: data.user.email,
           sessionExpires: data.session.expires_at,
@@ -115,6 +119,7 @@ export default function SignInPage() {
         }, 1500)
       } else {
         console.error('💔 No session or user created despite no error')
+        console.error('🔍 Debug data:', {
           hasSession: !!data.session,
           hasUser: !!data.user,
           sessionData: data.session,
@@ -129,6 +134,7 @@ export default function SignInPage() {
         message: err instanceof Error ? err.message : 'Unknown error',
         stack: err instanceof Error ? err.stack : 'No stack trace'
       })
+      console.error('💥 Catch block error:', {
         error: err,
         message: err instanceof Error ? err.message : 'Unknown error',
         stack: err instanceof Error ? err.stack : undefined
