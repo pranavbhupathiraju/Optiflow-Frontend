@@ -74,29 +74,19 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 </CardHeader>
                                 
                                 <CardContent className="flex-1 flex flex-col px-4 pb-4">
-                                    <div className="flex-1 flex flex-col justify-start space-y-1.5 mb-4 overflow-hidden">
+                                    <div className="flex-1 flex flex-col justify-start space-y-1 mb-3 overflow-hidden">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-[11px] text-foreground leading-tight">{feature}</span>
+                                                <CheckCircle className="w-2.5 h-2.5 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-[10px] text-foreground leading-tight">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                     
-                                    <div className="mt-auto pt-2">
+                                    <div className="mt-auto pt-1">
                                         <Button 
                                             size="default"
-                                            className="w-full py-2 text-sm font-semibold bg-primary hover:bg-primary/90 transition-all duration-200"
-                                            onClick={() => onSelectPlan(service.title, plan.name)}
-                                        >
-                                            Select {plan.name} Plan
-                                        </Button>
-                                    </div>
-                                    
-                                    <div className="mt-auto pt-2">
-                                        <Button 
-                                            size="default"
-                                            className="w-full py-2 text-sm font-semibold bg-primary hover:bg-primary/90 transition-all duration-200"
+                                            className="w-full py-1.5 text-xs font-semibold bg-primary hover:bg-primary/90 transition-all duration-200"
                                             onClick={() => onSelectPlan(service.title, plan.name)}
                                         >
                                             Select {plan.name} Plan
