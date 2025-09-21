@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
         // Format the email content
         const emailContent = `
-New Service Inquiry - ${data.service}
+New Service Inquiry - ${data.service}${data.plan ? ` (${data.plan} Plan)` : ''}
 
 COMPANY INFORMATION:
 - Company Name: ${data.companyName || "Not provided"}
@@ -27,6 +27,7 @@ COMPANY INFORMATION:
 
 PROJECT DETAILS:
 - Service: ${data.service}
+${data.plan ? `- Selected Plan: ${data.plan}` : ''}
 - Requirements: ${data.requirements}
 - Timeline: ${data.timeline || "Not specified"}
 - Budget: ${data.budget || "Not specified"}
