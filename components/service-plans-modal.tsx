@@ -36,7 +36,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-[98vw] w-[98vw] max-h-[98vh] overflow-y-auto p-16">
+            <DialogContent className="max-w-[98vw] w-[98vw] max-h-[98vh] p-16">
                 <DialogHeader>
                     <div className="flex items-center justify-between mb-16">
                         <div className="flex items-center space-x-3">
@@ -57,11 +57,11 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                 </DialogHeader>
 
                 <div className="mt-16">
-                    <div className="flex flex-wrap justify-center gap-12 xl:gap-16">
+                    <div className="flex justify-start gap-12 xl:gap-16 overflow-x-auto pb-4">
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`relative flex flex-col min-h-[700px] w-full max-w-[450px] xl:max-w-[500px] ${
+                                className={`relative flex flex-col min-h-[700px] min-w-[400px] w-[400px] flex-shrink-0 ${
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-2xl transform scale-105 bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-xl transition-all duration-300 hover:scale-105'
