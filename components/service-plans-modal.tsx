@@ -68,13 +68,13 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     <div className="text-2xl font-bold text-primary mb-3 leading-none text-center">
                                         {plan.price}
                                     </div>
-                                    <CardDescription className="text-sm leading-relaxed text-center h-12 flex items-center justify-center">
+                                    <CardDescription className="text-sm leading-tight text-center h-16 flex items-center justify-center px-2">
                                         {plan.description}
                                     </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col px-4 pb-4 justify-between">
-                                    <div className="space-y-1.5 mb-4 h-[120px] overflow-y-auto flex flex-col justify-start">
+                                <CardContent className="flex-1 flex flex-col px-4 pb-4">
+                                    <div className="space-y-1.5 mb-4 flex-1 overflow-y-auto flex flex-col justify-start">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
                                                 <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
