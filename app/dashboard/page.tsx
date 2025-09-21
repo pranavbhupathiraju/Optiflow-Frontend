@@ -180,14 +180,16 @@ export default function DashboardPage() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Image
-                src="/optiflow-logo-new.png"
-                alt="OptiFlow"
-                width={150}
-                height={45}
-                className="h-8 w-auto"
-                priority
-              />
+              <Link href="/">
+                <Image
+                  src="/optiflow-logo-new.png"
+                  alt="OptiFlow"
+                  width={150}
+                  height={45}
+                  className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  priority
+                />
+              </Link>
               <Separator orientation="vertical" className="h-6" />
               <h1 className="text-xl font-semibold">Dashboard</h1>
             </div>
