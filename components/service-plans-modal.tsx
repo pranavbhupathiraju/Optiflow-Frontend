@@ -61,7 +61,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 }`}
                             >
                                 {plan.highlight && (
-                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                                    <div className="absolute -top-3 left-0 right-0 z-10 flex justify-center">
                                         <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold flex items-center space-x-1 shadow-lg rounded-full">
                                             <Star className="w-3 h-3 fill-current" />
                                             <span>Most Popular</span>
