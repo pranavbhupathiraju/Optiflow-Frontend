@@ -15,31 +15,31 @@ interface Plan {
     highlight?: boolean
 }
 
-interface Service {
-    id: string
-    title: string
+                                    <CardHeader className="text-center pb-2 pt-4">
+                                        <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
+                                        <div className="text-2xl font-bold text-primary mb-2 leading-none">
     description: string
     icon: any
-    features: string[]
+                                        <CardDescription className="text-xs leading-relaxed px-2">
     plans: Plan[]
 }
 
 interface ServicePlansModalProps {
-    service: Service | null
-    isOpen: boolean
+                                    <CardContent className="flex-1 flex flex-col px-3 pb-4">
+                                        <div className="space-y-2 flex-1 mb-4">
     onClose: () => void
     onSelectPlan: (serviceTitle: string, planName: string) => void
-}
-
+                                                    <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
+                                                    <span className="text-xs text-foreground leading-relaxed">{feature}</span>
 export default function ServicePlansModal({ service, isOpen, onClose, onSelectPlan }: ServicePlansModalProps) {
     if (!service) return null
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="!max-w-[98vw] !w-[98vw] max-h-[98vh] flex flex-col">
-                <div className="p-16 flex flex-col flex-1 overflow-hidden">
+                                            size="sm" 
+                                            className={`w-full py-2 text-xs font-semibold ${
                     <DialogHeader className="mb-16">
-                        <div className="flex items-center space-x-3">
+                                                    ? 'bg-primary hover:bg-primary/90 shadow-lg' 
                             <div className="w-24 h-24 bg-primary/10 rounded-xl flex items-center justify-center">
                                 <service.icon className="w-12 h-12 text-primary" />
                             </div>
@@ -60,32 +60,32 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-2xl transform scale-105 bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-xl transition-all duration-300 hover:scale-105'
-                                }`}
-                            >
+                                <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center">
+                                    <service.icon className="w-8 h-8 text-primary" />
                                 {plan.highlight && (
                                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                                        <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold flex items-center space-x-1 shadow-lg rounded-full">
-                                            <Star className="w-4 h-4 fill-current" />
+                                    <DialogTitle className="text-3xl font-bold">{service.title} Plans</DialogTitle>
+                                    <DialogDescription className="text-lg mt-2 text-muted-foreground max-w-4xl">
                                             <span>Most Popular</span>
                                         </Badge>
                                     </div>
                                 )}
                                 
                                 <CardHeader className="text-center pb-4 pt-8">
-                                    <CardTitle className="text-2xl font-bold mb-4">{plan.name}</CardTitle>
+                        <div className="grid grid-cols-4 gap-6 w-full">
                                     <div className="text-3xl font-bold text-primary mb-4 leading-none">
                                         {plan.price}
                                     </div>
                                     <CardDescription className="text-sm leading-relaxed px-3">
                                         {plan.description}
-                                    </CardDescription>
-                                </CardHeader>
+                                            ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
+                                            : 'border hover:shadow-lg transition-all duration-300'
                                 
                                 <CardContent className="flex-1 flex flex-col px-4 pb-6">
                                     <div className="space-y-3 flex-1 mb-6">
-                                        {plan.features.map((feature, featureIndex) => (
-                                            <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                        <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
+                                            <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold flex items-center space-x-1 shadow-lg rounded-full">
+                                                <Star className="w-3 h-3 fill-current" />
                                                 <span className="text-sm text-foreground leading-relaxed">{feature}</span>
                                             </div>
                                         ))}
