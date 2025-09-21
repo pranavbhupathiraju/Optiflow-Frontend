@@ -56,12 +56,12 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 key={index} 
                                 className={`relative flex flex-col h-full overflow-hidden ${
                                     plan.highlight 
-                                        ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10 mt-4' 
+                                        ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-lg transition-all duration-300'
                                 }`}
                             >
                                 {plan.highlight && (
-                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
                                         <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold flex items-center space-x-1 shadow-lg rounded-full">
                                             <Star className="w-3 h-3 fill-current" />
                                             <span>Most Popular</span>
@@ -69,7 +69,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     </div>
                                 )}
                                 
-                                <CardHeader className="text-center pb-2 pt-3 px-2">
+                                <CardHeader className={`text-center pb-2 px-2 ${plan.highlight ? 'pt-6' : 'pt-3'}`}>
                                     <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
                                     <div className="text-lg font-bold text-primary mb-2 leading-none text-center">
                                         {plan.price}
