@@ -36,70 +36,73 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-7xl w-[95vw] max-h-[95vh] overflow-y-auto p-8">
                 <DialogHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                                <service.icon className="w-6 h-6 text-primary" />
+                            <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center">
+                                <service.icon className="w-8 h-8 text-primary" />
                             </div>
                             <div>
-                                <DialogTitle className="text-2xl">{service.title} Plans</DialogTitle>
-                                <DialogDescription className="text-base mt-1">
+                                <DialogTitle className="text-3xl font-bold">{service.title} Plans</DialogTitle>
+                                <DialogDescription className="text-lg mt-2 text-muted-foreground max-w-2xl">
                                     {service.description}
                                 </DialogDescription>
                             </div>
                         </div>
-                        <Button variant="ghost" size="sm" onClick={onClose}>
-                            <X className="w-4 h-4" />
+                        <Button variant="ghost" size="icon" onClick={onClose} className="h-10 w-10">
+                            <X className="w-5 h-5" />
                         </Button>
                     </div>
                 </DialogHeader>
 
-                <div className="mt-6">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="mt-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`relative h-full flex flex-col ${
+                                className={`relative h-full flex flex-col min-h-[500px] ${
                                     plan.highlight 
-                                        ? 'border-2 border-primary shadow-lg scale-105' 
-                                        : 'border hover:shadow-md transition-shadow'
+                                        ? 'border-2 border-primary shadow-xl transform scale-105 bg-gradient-to-b from-primary/5 to-primary/10' 
+                                        : 'border hover:shadow-lg transition-all duration-300 hover:scale-102'
                                 }`}
                             >
                                 {plan.highlight && (
-                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                        <Badge className="bg-primary text-primary-foreground px-3 py-1 flex items-center space-x-1">
-                                            <Star className="w-3 h-3" />
-                                            <span>Recommended</span>
+                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                                        <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold flex items-center space-x-2 shadow-lg">
+                                            <Star className="w-4 h-4 fill-current" />
+                                            <span>Most Popular</span>
                                         </Badge>
                                     </div>
                                 )}
                                 
-                                <CardHeader className="text-center pb-4">
-                                    <CardTitle className="text-xl">{plan.name}</CardTitle>
-                                    <div className="text-3xl font-bold text-primary mb-2">
+                                <CardHeader className="text-center pb-6 pt-8">
+                                    <CardTitle className="text-2xl font-bold mb-4">{plan.name}</CardTitle>
+                                    <div className="text-4xl font-bold text-primary mb-4">
                                         {plan.price}
                                     </div>
-                                    <CardDescription>{plan.description}</CardDescription>
+                                    <CardDescription className="text-base leading-relaxed px-2">
+                                        {plan.description}
+                                    </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col">
-                                    <div className="space-y-3 flex-1">
+                                <CardContent className="flex-1 flex flex-col px-6 pb-8">
+                                    <div className="space-y-4 flex-1 mb-8">
                                         {plan.features.map((feature, featureIndex) => (
-                                            <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-sm text-muted-foreground">{feature}</span>
+                                            <div key={featureIndex} className="flex items-start space-x-3">
+                                                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-sm text-foreground leading-relaxed">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                     
                                     <Button 
-                                        className={`w-full mt-6 ${
+                                        size="lg"
+                                        className={`w-full py-3 text-base font-semibold ${
                                             plan.highlight 
-                                                ? 'bg-primary hover:bg-primary/90' 
+                                                ? 'bg-primary hover:bg-primary/90 shadow-lg' 
                                                 : 'bg-secondary hover:bg-secondary/90'
-                                        }`}
+                                        } transition-all duration-200`}
                                         onClick={() => onSelectPlan(service.title, plan.name)}
                                     >
                                         Select {plan.name}
