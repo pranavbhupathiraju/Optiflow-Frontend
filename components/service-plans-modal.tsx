@@ -74,11 +74,11 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 </CardHeader>
                                 
                                 <CardContent className="flex-1 flex flex-col px-4 pb-4 justify-between">
-                                    <div className="space-y-2 mb-4 h-[140px] overflow-y-auto">
+                                    <div className="space-y-1.5 mb-4 h-[120px] overflow-y-auto">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-sm text-foreground leading-tight">{feature}</span>
+                                                <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-xs text-foreground leading-tight">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
