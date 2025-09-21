@@ -25,6 +25,7 @@ interface Plan {
 }
 
 interface ServicePlansModalProps {
+                                    }
                                     <CardContent className="flex-1 flex flex-col px-3 pb-4">
                                         <div className="space-y-2 flex-1 mb-4">
     onClose: () => void
@@ -32,6 +33,7 @@ interface ServicePlansModalProps {
                                                     <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
                                                     <span className="text-xs text-foreground leading-relaxed">{feature}</span>
 export default function ServicePlansModal({ service, isOpen, onClose, onSelectPlan }: ServicePlansModalProps) {
+                                    }
     if (!service) return null
 
     return (
@@ -60,6 +62,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-2xl transform scale-105 bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-xl transition-all duration-300 hover:scale-105'
+                                }
                                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center">
                                     <service.icon className="w-8 h-8 text-primary" />
                                 {plan.highlight && (
@@ -108,6 +111,10 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                     </div>
                 </div>
             </DialogContent>
+                    )
+                    )
+                    }
+        }
         </Dialog>
     )
 }
