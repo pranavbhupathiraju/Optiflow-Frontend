@@ -74,7 +74,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 </CardHeader>
                                 
                                 <CardContent className="flex-1 flex flex-col px-4 pb-4">
-                                    <div className="space-y-1.5 mb-4 flex-1 overflow-y-auto flex flex-col justify-start">
+                                    <div className="min-h-[180px] flex flex-col justify-start space-y-1.5 mb-4">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
                                                 <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
@@ -83,7 +83,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                         ))}
                                     </div>
                                     
-                                    <div className="mt-auto">
+                                    <div className="mt-auto pt-2">
                                         <Button 
                                             size="default"
                                             className="w-full py-2 text-sm font-semibold bg-primary hover:bg-primary/90 transition-all duration-200"
