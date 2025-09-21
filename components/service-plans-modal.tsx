@@ -50,18 +50,18 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         </div>
                     </DialogHeader>
 
-                    <div className="grid grid-cols-4 gap-3 w-full h-[420px] mb-4">
+                    <div className="grid grid-cols-4 gap-2 w-full h-[400px]">
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
                                 className={`relative flex flex-col h-full overflow-hidden ${
                                     plan.highlight 
-                                        ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
+                                        ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10 mt-4' 
                                         : 'border hover:shadow-lg transition-all duration-300'
                                 }`}
                             >
                                 {plan.highlight && (
-                                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10">
+                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                                         <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold flex items-center space-x-1 shadow-lg rounded-full">
                                             <Star className="w-3 h-3 fill-current" />
                                             <span>Most Popular</span>
@@ -69,17 +69,17 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     </div>
                                 )}
                                 
-                                <CardHeader className="text-center pb-2 pt-3 px-3">
+                                <CardHeader className="text-center pb-2 pt-3 px-2">
                                     <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
-                                    <div className="text-xl font-bold text-primary mb-2 leading-none text-center">
+                                    <div className="text-lg font-bold text-primary mb-2 leading-none text-center">
                                         {plan.price}
                                     </div>
-                                    <CardDescription className="text-xs leading-relaxed px-2 text-center">
+                                    <CardDescription className="text-xs leading-relaxed text-center">
                                         {plan.description}
                                     </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col px-3 pb-3 justify-between">
+                                <CardContent className="flex-1 flex flex-col px-2 pb-2 justify-between">
                                     <div className="space-y-1.5 flex-1 mb-3">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
@@ -91,7 +91,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     
                                     <Button 
                                         size="sm"
-                                        className={`w-full py-1.5 text-[11px] font-semibold mt-auto ${
+                                        className={`w-full py-1 text-[10px] font-semibold mt-auto ${
                                             plan.highlight 
                                                 ? 'bg-primary hover:bg-primary/90 shadow-lg' 
                                                 : 'bg-secondary hover:bg-secondary/90'
