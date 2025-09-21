@@ -56,44 +56,44 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`relative flex flex-col min-h-[700px] min-w-[400px] w-[400px] flex-shrink-0 ${
+                                className={`relative flex flex-col min-h-[500px] min-w-[280px] w-[280px] flex-shrink-0 ${
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-2xl transform scale-105 bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-xl transition-all duration-300 hover:scale-105'
                                 }`}
                             >
                                 {plan.highlight && (
-                                    <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-10">
-                                        <Badge className="bg-primary text-primary-foreground px-8 py-4 text-lg font-semibold flex items-center space-x-2 shadow-lg rounded-full">
-                                            <Star className="w-6 h-6 fill-current" />
+                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                                        <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold flex items-center space-x-1 shadow-lg rounded-full">
+                                            <Star className="w-4 h-4 fill-current" />
                                             <span>Most Popular</span>
                                         </Badge>
                                     </div>
                                 )}
                                 
-                                <CardHeader className="text-center pb-10 pt-16">
-                                    <CardTitle className="text-4xl font-bold mb-8">{plan.name}</CardTitle>
-                                    <div className="text-6xl font-bold text-primary mb-8 leading-none">
+                                <CardHeader className="text-center pb-4 pt-8">
+                                    <CardTitle className="text-2xl font-bold mb-4">{plan.name}</CardTitle>
+                                    <div className="text-3xl font-bold text-primary mb-4 leading-none">
                                         {plan.price}
                                     </div>
-                                    <CardDescription className="text-xl leading-relaxed px-6">
+                                    <CardDescription className="text-sm leading-relaxed px-3">
                                         {plan.description}
                                     </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col px-10 pb-12">
-                                    <div className="space-y-6 flex-1 mb-12">
+                                <CardContent className="flex-1 flex flex-col px-4 pb-6">
+                                    <div className="space-y-3 flex-1 mb-6">
                                         {plan.features.map((feature, featureIndex) => (
-                                            <div key={featureIndex} className="flex items-start space-x-4">
-                                                <CheckCircle className="w-7 h-7 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-lg text-foreground leading-relaxed">{feature}</span>
+                                            <div key={featureIndex} className="flex items-start space-x-2">
+                                                <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-sm text-foreground leading-relaxed">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                     
                                     <Button 
                                         size="lg" 
-                                        className={`w-full py-6 text-xl font-semibold ${
+                                        className={`w-full py-3 text-sm font-semibold ${
                                             plan.highlight 
                                                 ? 'bg-primary hover:bg-primary/90 shadow-xl' 
                                                 : 'bg-secondary hover:bg-secondary/90'
