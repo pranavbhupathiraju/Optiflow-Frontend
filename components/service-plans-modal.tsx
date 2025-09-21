@@ -54,33 +54,25 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`relative flex flex-col h-full overflow-hidden ${
+                                className={`flex flex-col h-full overflow-hidden ${
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-lg transition-all duration-300'
                                 }`}
                             >
-                                {plan.highlight && (
-                                    <div className="absolute -top-3 left-0 right-0 z-10 flex justify-center">
-                                        <Badge className="bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold flex items-center space-x-1 shadow-lg rounded-full">
-                                            <Star className="w-3 h-3 fill-current" />
-                                            <span>Most Popular</span>
-                                        </Badge>
-                                    </div>
-                                )}
                                 
-                                <CardHeader className={`text-center pb-2 px-2 ${plan.highlight ? 'pt-6' : 'pt-3'}`}>
+                                <CardHeader className="text-center pb-2 px-2 pt-3">
                                     <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
                                     <div className="text-lg font-bold text-primary mb-2 leading-none text-center">
                                         {plan.price}
                                     </div>
-                                    <CardDescription className="text-xs leading-relaxed text-center">
+                                    <CardDescription className="text-xs leading-relaxed text-center h-10 flex items-center justify-center">
                                         {plan.description}
                                     </CardDescription>
                                 </CardHeader>
                                 
                                 <CardContent className="flex-1 flex flex-col px-2 pb-2 justify-between">
-                                    <div className="space-y-1.5 flex-1 mb-3">
+                                    <div className="space-y-1.5 mb-3 h-[120px] overflow-y-auto">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
                                                 <CheckCircle className="w-2.5 h-2.5 text-primary mt-0.5 flex-shrink-0" />
