@@ -34,8 +34,8 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="!max-w-[98vw] !w-[98vw] max-h-[98vh] flex flex-col">
-                <div className="p-6 flex flex-col flex-1 overflow-hidden">
+            <DialogContent className="!max-w-[95vw] !w-[95vw] !max-h-[90vh] flex flex-col">
+                <div className="p-4 flex flex-col flex-1 overflow-hidden">
                     <DialogHeader className="mb-8">
                         <div className="flex items-center space-x-3">
                             <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -50,11 +50,11 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         </div>
                     </DialogHeader>
 
-                    <div className="grid grid-cols-4 gap-4 w-full h-[500px]">
+                    <div className="grid grid-cols-4 gap-3 w-full h-[420px] mb-4">
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`relative flex flex-col h-full ${
+                                className={`relative flex flex-col h-full overflow-hidden ${
                                     plan.highlight 
                                         ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
                                         : 'border hover:shadow-lg transition-all duration-300'
@@ -69,7 +69,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     </div>
                                 )}
                                 
-                                <CardHeader className="text-center pb-2 pt-4">
+                                <CardHeader className="text-center pb-2 pt-3 px-3">
                                     <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
                                     <div className="text-xl font-bold text-primary mb-2 leading-none text-center">
                                         {plan.price}
@@ -79,19 +79,19 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col px-4 pb-4 justify-between">
-                                    <div className="space-y-2 flex-1 mb-4">
+                                <CardContent className="flex-1 flex flex-col px-3 pb-3 justify-between">
+                                    <div className="space-y-1.5 flex-1 mb-3">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-xs text-foreground leading-relaxed">{feature}</span>
+                                                <CheckCircle className="w-2.5 h-2.5 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-[11px] text-foreground leading-tight">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                     
                                     <Button 
-                                        size="sm" 
-                                        className={`w-full py-2 text-xs font-semibold mt-auto ${
+                                        size="sm"
+                                        className={`w-full py-1.5 text-[11px] font-semibold mt-auto ${
                                             plan.highlight 
                                                 ? 'bg-primary hover:bg-primary/90 shadow-lg' 
                                                 : 'bg-secondary hover:bg-secondary/90'
