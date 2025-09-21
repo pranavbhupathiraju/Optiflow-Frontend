@@ -50,36 +50,42 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         </div>
                     </DialogHeader>
 
-                    <div className="grid grid-cols-4 gap-2 w-full h-[400px]">
+                    <div className={`grid gap-6 w-full h-[400px] ${
+                        service.plans.length <= 2 
+                            ? 'grid-cols-2 max-w-4xl mx-auto' 
+                            : service.plans.length === 3 
+                                ? 'grid-cols-3 max-w-5xl mx-auto' 
+                                : 'grid-cols-4'
+                    }`}>
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className="flex flex-col h-full overflow-hidden border hover:shadow-lg transition-all duration-300"
+                                className="flex flex-col h-full overflow-hidden border hover:shadow-lg transition-all duration-300 min-w-0"
                             >
                                 
-                                <CardHeader className="text-center pb-2 px-2 pt-3">
-                                    <CardTitle className="text-lg font-bold mb-2">{plan.name}</CardTitle>
-                                    <div className="text-lg font-bold text-primary mb-2 leading-none text-center">
+                                <CardHeader className="text-center pb-2 px-4 pt-4">
+                                    <CardTitle className="text-xl font-bold mb-3">{plan.name}</CardTitle>
+                                    <div className="text-2xl font-bold text-primary mb-3 leading-none text-center">
                                         {plan.price}
                                     </div>
-                                    <CardDescription className="text-xs leading-relaxed text-center h-10 flex items-center justify-center">
+                                    <CardDescription className="text-sm leading-relaxed text-center h-12 flex items-center justify-center">
                                         {plan.description}
                                     </CardDescription>
                                 </CardHeader>
                                 
-                                <CardContent className="flex-1 flex flex-col px-2 pb-2 justify-between">
-                                    <div className="space-y-1.5 mb-3 h-[120px] overflow-y-auto">
+                                <CardContent className="flex-1 flex flex-col px-4 pb-4 justify-between">
+                                    <div className="space-y-2 mb-4 h-[140px] overflow-y-auto">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
-                                                <CheckCircle className="w-2.5 h-2.5 text-primary mt-0.5 flex-shrink-0" />
-                                                <span className="text-[11px] text-foreground leading-tight">{feature}</span>
+                                                <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-sm text-foreground leading-tight">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
                                     
                                     <Button 
-                                        size="sm"
-                                        className="w-full py-1 text-[10px] font-semibold mt-auto bg-primary hover:bg-primary/90 transition-all duration-200"
+                                        size="default"
+                                        className="w-full py-2 text-sm font-semibold mt-auto bg-primary hover:bg-primary/90 transition-all duration-200"
                                         onClick={() => onSelectPlan(service.title, plan.name)}
                                     >
                                         Select {plan.name} Plan
