@@ -54,11 +54,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                         {service.plans.map((plan, index) => (
                             <Card 
                                 key={index} 
-                                className={`flex flex-col h-full overflow-hidden ${
-                                    plan.highlight 
-                                        ? 'border-2 border-primary shadow-lg bg-gradient-to-b from-primary/5 to-primary/10' 
-                                        : 'border hover:shadow-lg transition-all duration-300'
-                                }`}
+                                className="flex flex-col h-full overflow-hidden border hover:shadow-lg transition-all duration-300"
                             >
                                 
                                 <CardHeader className="text-center pb-2 px-2 pt-3">
@@ -83,11 +79,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                     
                                     <Button 
                                         size="sm"
-                                        className={`w-full py-1 text-[10px] font-semibold mt-auto ${
-                                            plan.highlight 
-                                                ? 'bg-primary hover:bg-primary/90 shadow-lg' 
-                                                : 'bg-secondary hover:bg-secondary/90'
-                                        } transition-all duration-200`}
+                                        className="w-full py-1 text-[10px] font-semibold mt-auto bg-primary hover:bg-primary/90 transition-all duration-200"
                                         onClick={() => onSelectPlan(service.title, plan.name)}
                                     >
                                         Select {plan.name} Plan
