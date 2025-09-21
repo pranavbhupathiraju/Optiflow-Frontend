@@ -74,7 +74,7 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                 </CardHeader>
                                 
                                 <CardContent className="flex-1 flex flex-col px-4 pb-4 justify-between">
-                                    <div className="space-y-1.5 mb-4 h-[120px] overflow-y-auto">
+                                    <div className="space-y-1.5 mb-4 h-[120px] overflow-y-auto flex flex-col justify-start">
                                         {plan.features.map((feature, featureIndex) => (
                                             <div key={featureIndex} className="flex items-start space-x-2">
                                                 <CheckCircle className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
@@ -83,13 +83,15 @@ export default function ServicePlansModal({ service, isOpen, onClose, onSelectPl
                                         ))}
                                     </div>
                                     
-                                    <Button 
-                                        size="default"
-                                        className="w-full py-2 text-sm font-semibold mt-auto bg-primary hover:bg-primary/90 transition-all duration-200"
-                                        onClick={() => onSelectPlan(service.title, plan.name)}
-                                    >
-                                        Select {plan.name} Plan
-                                    </Button>
+                                    <div className="mt-auto">
+                                        <Button 
+                                            size="default"
+                                            className="w-full py-2 text-sm font-semibold bg-primary hover:bg-primary/90 transition-all duration-200"
+                                            onClick={() => onSelectPlan(service.title, plan.name)}
+                                        >
+                                            Select {plan.name} Plan
+                                        </Button>
+                                    </div>
                                 </CardContent>
                             </Card>
                         ))}
